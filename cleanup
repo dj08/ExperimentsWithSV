@@ -1,0 +1,9 @@
+# Clean up file
+set direc = `pwd`
+echo "Cleaning up $direc"
+
+mv *.sv ..
+rm -rf *
+
+mv ../*.sv .
+echo "Done"
