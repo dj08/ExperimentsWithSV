@@ -1,0 +1,1 @@
+Some exercises and examples from IEEE 1800-2012 standard (SystemVerilog)
