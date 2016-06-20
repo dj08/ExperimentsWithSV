@@ -1,5 +1,10 @@
 module arrays();
 
+   /**** Unpacked Arrays 
+    * Standard way to declare arrays. 
+    * Limitation: Cannot be referred collectively often.
+    * 
+    ****/
    // Vanilla initializations
    bit [7:0] sth_pkd;
    bit       sth_unpkd [7:0];
@@ -43,21 +48,86 @@ module arrays();
 
       // sampleB_unpkd = '{200, default:-1};	// Doesn't work - compile error
    end
-   
-   int       sampleB[4];
 
    /*
     * Display tasks cannot accept entire unpacked arrays either.
     * Packed arrays are acceptable.
-   initial 
-     begin : displayTasks
+    initial 
+    begin : displayTasks
 
-        $display( "sampleA_unpkd, sampleB_unpkd, sampleB2_unpkd" );
-        $display( sampleA_unpkd,, sampleB_unpkd,, sampleC_unpkd );
+    $display( "sampleA_unpkd, sampleB_unpkd, sampleB2_unpkd" );
+    $display( sampleA_unpkd,, sampleB_unpkd,, sampleC_unpkd );
 
      end : displayTasks
     */
+
+   /*
+    * Basic operations: printing, comparing, ... : use for/foreach
+    * 
+    */
+
+   int sampleA [7:0] = '{0,1,2,3,4,5,6,7};
+   int sampleB [3:7];
+
+   initial begin
+      foreach (sampleA[i])
+        $display( "sampleA[%0d] = %0d", i, sampleA[i] );
+      /* Output: 
+       sampleA[7] = 0
+       sampleA[6] = 1
+       sampleA[5] = 2
+       sampleA[4] = 3
+       sampleA[3] = 4
+       sampleA[2] = 5
+       sampleA[1] = 6
+       sampleA[0] = 7
+       */
+      
+      foreach (sampleB[i])
+        $display( "sampleB[%0d] = %0d", i, sampleB[i] );
+      /* Output: Notice the order!
+       sampleB[3] = 0
+       sampleB[4] = 0
+       sampleB[5] = 0
+       sampleB[6] = 0
+       sampleB[7] = 0
+       */
+
+   end
+
+   /**** Packed Arrays
+    * Packed arrays, finally. Much easier to deal with in a bunch.
+    * Limitations: bit/logic only. 
+    * 
+    ****/
+
+   bit [7:0] sampleA_pkd;
+   bit [7:0] sampleB_pkd = 'd10;		// or 'b1011_1101
+   bit [7:0] sampleC_pkd = 'b1011_1101;
+   logic [7:0] sampleD_pkd = 'b10XX_Z111;	// Underscores not a problem.
+   logic [7:0] sampleE_pkd;			// Initializes to x, not z.
+
+   /* The following fail a compile:
+
+    bit [8] sample;
+    int [7:0] sampleA;
+    int [7:0] sampleA = '{0,1,2,3,4,5,6,7,8,9};
+    int [1:2] sampleB;
+    */
+
+   initial begin
+      $display( "Packed array prints" );
+      $display ( sampleA_pkd,, sampleB_pkd,, sampleC_pkd,, sampleD_pkd,, sampleE_pkd );	
+      //         0             10            189           X             x
+
+      $displayb( sampleA_pkd,, sampleB_pkd,, sampleC_pkd,, sampleD_pkd,, sampleE_pkd );	
+      //         00000000      00001010      10111101      10xxz111      xxxxxxxx
+   end
+
+   // Packed arrays are useful for memories as well.
+   // bit [3:0][7:0] barray [3];		// 3x32 memory
+
    
 endmodule : arrays
 
-   
+
