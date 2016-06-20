@@ -116,7 +116,7 @@ module arrays();
     */
 
    initial begin
-      $display( "Packed array prints" );
+      $display( "**** Packed array experiments ****" );
       $display ( sampleA_pkd,, sampleB_pkd,, sampleC_pkd,, sampleD_pkd,, sampleE_pkd );	
       //         0             10            189           X             x
 
@@ -126,6 +126,45 @@ module arrays();
 
    // Packed arrays are useful for memories as well.
    // bit [3:0][7:0] barray [3];		// 3x32 memory
+
+
+   /**** Dynamic Arrays
+
+    * Similar to unpacked arrays, but size can be varied at run
+    * time. Useful for holding randomly large data.
+    * Or when you are lazy to count... :)
+    * 
+    ****/
+
+   int dyn[], d2[];
+   
+   // Mixing array types permitted
+   bit [7:0] varMem [] = '{'h00, 'h11};
+   bit [7:0] varMem3D [2][] = '{'{'h00, 'h11}, '{'h3F, 'hF3}, '{'hDE, 'hED}};
+
+   initial begin
+
+      $display( "**** Dynamic array experiments ****" );
+      dyn = new[5];				// Allocate 5 elements
+      // $display( dyn );			// Fails compile, naturally.
+      $displayb( dyn[4] );			// 00000000000000000000000000000000
+      foreach( dyn[i] ) dyn[i]=i;
+      // Notice: No error on out of bounds reference! Only default values.
+      $displayb( dyn[5] );			// 00000000000000000000000000000000
+      $displayb( dyn[4] );			// 00000000000000000000000000000100
+
+      d2 = dyn;					// Copying without new() method
+      d2[0] = 5;
+
+      dyn = new[20](dyn);			// Reallocation with retention
+      dyn = new[100];				// No retention
+
+      $display( dyn.size,, d2.size,, 
+                $size(dyn) );			//         100           5           100
+      
+      dyn.delete();
+      
+   end
 
    
 endmodule : arrays
