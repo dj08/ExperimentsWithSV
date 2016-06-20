@@ -9,6 +9,7 @@ module displayTasks() ;
       static bit [7:0] sth = 5;
       static int       sthi = 8;
       static bit [7:0] src [3] = '{3{5}};
+      static bit       unpkd [8] = '{8{8}};
       
       /*
        * First two return '1', last two '0'
@@ -57,8 +58,8 @@ module displayTasks() ;
        * Here, simulator does not find anything for the second %b!
        $displayb( "sth[0]=%0b, sth=%0b", sth[0],, sth );	
 
-       * Here, we are expecting too much from $displayb for a multi-dim array... :)
-       $displayb( src,, src[0],, src[0][2:1] );
+       * Here, we are expecting too much from $display* for a multi-dim/unpkd array... :)
+       $displayb( src,, src[0],, src[0][2:1], unpkd );
 
        */
       
