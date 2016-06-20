@@ -21,9 +21,9 @@ module loops();
        sampleA[1] = 6
        sampleA[0] = 7
        */
-      
-      foreach (sampleB[i])
-        $display( "sampleB[%0d] = %0d", i, sampleB[i] );
+
+      // One liners permitted
+      foreach (sampleB[i]) $display( "sampleB[%0d] = %0d", i, sampleB[i] );
       /* Output: Notice the order!
        sampleB[3] = 0
        sampleB[4] = 0
